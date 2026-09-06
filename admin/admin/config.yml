@@ -1,5 +1,6 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: "asominabrand-maker/steady-finance.html"
   branch: main
 
 media_folder: "images/uploads"
