@@ -33,6 +33,7 @@
   nav{
     display:flex; align-items:center; justify-content:space-between;
     padding:28px 32px; max-width:1180px; margin:0 auto;
+    position:sticky; top:0; z-index:100; background:var(--paper);
   }
   .logo{font-family:'Fraunces', serif; font-weight:600; font-size:20px; letter-spacing:0.01em; color:var(--ink);}
   .logo em{font-style:italic; font-weight:400; color:var(--gold);}
@@ -139,6 +140,8 @@
   .about{display:grid; grid-template-columns:0.8fr 1.2fr; gap:64px; align-items:center;}
   .about-photo{aspect-ratio:4/5; background:linear-gradient(160deg, var(--ink) 0%, var(--ink-soft) 100%); border-radius:3px; position:relative; overflow:hidden;}
   .about-photo::after{content:'ФОТО'; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:rgba(241,236,227,0.35); font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:0.12em;}
+  .about-photo.has-photo::after{display:none;}
+  .about-photo.has-photo{background-size:cover; background-position:center;}
   .about-text p.lead{font-family:'Fraunces', serif; font-weight:400; font-style:italic; font-size:24px; color:var(--ink); line-height:1.45; margin-bottom:26px;}
   .about-text p.body-copy{font-size:15px; color:var(--ink-soft); line-height:1.75; margin-bottom:14px;}
   .about-stats{display:flex; gap:32px; margin-top:26px; flex-wrap:wrap;}
@@ -304,6 +307,17 @@
     .navlinks.open{display:flex;}
     .navlinks a{padding:14px 0; border-bottom:1px solid var(--line); width:100%;}
   }
+
+  /* ---------- BACK TO TOP ---------- */
+  .back-to-top{
+    position:fixed; right:24px; bottom:24px; width:48px; height:48px; border-radius:50%;
+    background:var(--ink); color:var(--paper); display:flex; align-items:center; justify-content:center;
+    text-decoration:none; font-size:20px; border:none; cursor:pointer;
+    opacity:0; visibility:hidden; transform:translateY(10px);
+    transition:opacity .25s ease, transform .25s ease, visibility .25s; z-index:90;
+  }
+  .back-to-top.visible{opacity:1; visibility:visible; transform:translateY(0);}
+  .back-to-top:hover{background:var(--ink-soft);}
 </style>
 </head>
 <body>
@@ -448,7 +462,7 @@
 
 <section id="about">
   <div class="about">
-    <div class="about-photo"></div>
+    <div class="about-photo" id="aboutPhoto"></div>
     <div class="about-text">
       <p class="lead">Моя задача — собрать не просто документы, а убедительную и честную историю бизнеса, в которую поверит банк или инвестор.</p>
       <p class="body-copy">Работаю в финансовом консалтинге 6 лет, реализовала более 300 проектов — в том числе для узконаправленных ниш, где типовые шаблоны не работают.</p>
@@ -517,7 +531,7 @@
     <h2>Отзывы клиентов</h2>
     <p>Голос тех, кто уже прошёл этот путь.</p>
   </div>
-  <div class="testi-grid">
+  <div class="testi-grid" id="testiGrid">
     <div class="testi">
       <p class="txt">«До этого мы дважды получали отказ от банка и не понимали, в чём проблема. После пересборки документов заявку одобрили с первого раза».</p>
       <div><div class="testi-author">Клиент</div><div class="testi-role">Строительная компания</div></div>
@@ -646,11 +660,39 @@
 <section id="contact" class="contact-cta">
   <h2>Готовы превратить проект в <em>убедительные</em> документы?</h2>
   <p>Первая консультация — бесплатно, чтобы понять вашу ситуацию и предложить формат работы.</p>
-  <a href="#price" class="btn-primary">Записаться на консультацию</a>
+  <div class="price-actions" style="max-width:700px; margin:0 auto; text-align:left;">
+    <div class="price-panel">
+      <h4>Позвонить сейчас</h4>
+      <p>Свяжемся сразу и обсудим вашу задачу.</p>
+      <a href="tel:+79615861887" class="calc-link">8 961 586 1887</a>
+    </div>
+    <div class="price-panel">
+      <h4>Оставить заявку</h4>
+      <p>Оставьте имя и номер — перезвоним сами.</p>
+      <form class="form-row" name="booking-request" method="POST" data-netlify="true">
+        <input type="hidden" name="form-name" value="booking-request">
+        <div class="form-field">
+          <label for="b-name">Имя</label>
+          <input id="b-name" type="text" name="name" required>
+        </div>
+        <div class="form-field">
+          <label for="b-phone">Телефон</label>
+          <input id="b-phone" type="tel" name="phone" required>
+        </div>
+        <button type="submit" class="btn-primary">Отправить</button>
+      </form>
+    </div>
+  </div>
 </section>
 
 <footer>
-  © 2026 Steady Finance · Финансовый и инвестиционный консалтинг
+  <div style="margin-bottom:10px; line-height:1.7;">
+    ИП Степанова Виктория Витальевна · ИНН 234701906797 · ОГРН 323237500416969<br>
+    Юридический адрес: 350087, Россия, Краснодарский край, г. Краснодар, проезд 6-й Куликова поля, д. 3
+  </div>
+  <div>
+    © 2026 Steady Finance · Финансовый и инвестиционный консалтинг · <a href="dogovor-shablon.docx" style="color:var(--ink-soft); text-decoration:underline;">Шаблон договора</a>
+  </div>
 </footer>
 
 
@@ -667,6 +709,67 @@
         a.addEventListener('click', function(){ links.classList.remove('open'); });
       });
     }
+  })();
+</script>
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<script>
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.on("init", user => {
+      if (!user) {
+        window.netlifyIdentity.on("login", () => {
+          document.location.href = "/admin/";
+        });
+      }
+    });
+  }
+</script>
+<script>
+  fetch('content/about.json').then(r => r.json()).then(data => {
+    if (data.photo) {
+      const el = document.getElementById('aboutPhoto');
+      el.style.backgroundImage = 'url(' + data.photo + ')';
+      el.classList.add('has-photo');
+    }
+  }).catch(() => {});
+
+  fetch('content/testimonials.json').then(r => r.json()).then(data => {
+    if (!data.testimonials || !data.testimonials.length) return;
+    const grid = document.getElementById('testiGrid');
+    grid.innerHTML = '';
+    data.testimonials.forEach(t => {
+      const div = document.createElement('div');
+      div.className = 'testi';
+      const p = document.createElement('p');
+      p.className = 'txt';
+      p.textContent = '«' + t.text + '»';
+      const wrap = document.createElement('div');
+      const author = document.createElement('div');
+      author.className = 'testi-author';
+      author.textContent = t.author || 'Клиент';
+      const role = document.createElement('div');
+      role.className = 'testi-role';
+      role.textContent = t.role || '';
+      wrap.appendChild(author);
+      wrap.appendChild(role);
+      div.appendChild(p);
+      div.appendChild(wrap);
+      grid.appendChild(div);
+    });
+  }).catch(() => {});
+</script>
+<button class="back-to-top" id="backToTop" aria-label="Наверх">&#8593;</button>
+
+<script>
+  (function(){
+    var btn = document.getElementById('backToTop');
+    if(!btn) return;
+    window.addEventListener('scroll', function(){
+      if(window.scrollY > 400){ btn.classList.add('visible'); }
+      else{ btn.classList.remove('visible'); }
+    });
+    btn.addEventListener('click', function(){
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
   })();
 </script>
 </body>
