@@ -33,6 +33,7 @@
   nav{
     display:flex; align-items:center; justify-content:space-between;
     padding:28px 32px; max-width:1180px; margin:0 auto;
+    position:sticky; top:0; z-index:100; background:var(--paper);
   }
   .logo{font-family:'Fraunces', serif; font-weight:600; font-size:20px; letter-spacing:0.01em; color:var(--ink);}
   .logo em{font-style:italic; font-weight:400; color:var(--gold);}
@@ -306,6 +307,17 @@
     .calc-options{flex-direction:column;}
     .calc-option{min-width:0;}
   }
+
+  /* ---------- BACK TO TOP ---------- */
+  .back-to-top{
+    position:fixed; right:24px; bottom:24px; width:48px; height:48px; border-radius:50%;
+    background:var(--ink); color:var(--paper); display:flex; align-items:center; justify-content:center;
+    text-decoration:none; font-size:20px; border:none; cursor:pointer;
+    opacity:0; visibility:hidden; transform:translateY(10px);
+    transition:opacity .25s ease, transform .25s ease, visibility .25s; z-index:90;
+  }
+  .back-to-top.visible{opacity:1; visibility:visible; transform:translateY(0);}
+  .back-to-top:hover{background:var(--ink-soft);}
 </style>
 </head>
 <body>
@@ -384,7 +396,13 @@
 </div>
 
 <footer>
-  © 2026 Steady Finance · Финансовый и инвестиционный консалтинг
+  <div style="margin-bottom:10px; line-height:1.7;">
+    ИП Степанова Виктория Витальевна · ИНН 234701906797 · ОГРН 323237500416969<br>
+    Юридический адрес: 350087, Россия, Краснодарский край, г. Краснодар, проезд 6-й Куликова поля, д. 3
+  </div>
+  <div>
+    © 2026 Steady Finance · Финансовый и инвестиционный консалтинг · <a href="dogovor-shablon.docx" style="color:var(--ink-soft); text-decoration:underline;">Шаблон договора</a>
+  </div>
 </footer>
 
 <script>
@@ -483,6 +501,21 @@
         a.addEventListener('click', function(){ links.classList.remove('open'); });
       });
     }
+  })();
+</script>
+<button class="back-to-top" id="backToTop" aria-label="Наверх">&#8593;</button>
+
+<script>
+  (function(){
+    var btn = document.getElementById('backToTop');
+    if(!btn) return;
+    window.addEventListener('scroll', function(){
+      if(window.scrollY > 400){ btn.classList.add('visible'); }
+      else{ btn.classList.remove('visible'); }
+    });
+    btn.addEventListener('click', function(){
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
   })();
 </script>
 </body>
